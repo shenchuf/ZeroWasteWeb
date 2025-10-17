@@ -1,0 +1,85 @@
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: #213547;
+  background-color: #f6ffed; 
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #389e0d;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: #52c41a;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #f6ffed;
+  color: #213547;
+}
+
+
+#root {
+  margin: 0 auto;
+  padding: 0;
+  max-width: none;
+}
+
+/* ✅ 通用容器居中对齐 */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  color: #237804;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+/* ===========================
+   按钮默认样式重置
+   =========================== */
+button {
+  border: none;
+  outline: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ===========================
+   Ant Design 组件微调
+   =========================== */
+.ant-card {
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.ant-collapse {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 8px !important;
+}

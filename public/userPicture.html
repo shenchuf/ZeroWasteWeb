@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>问卷结果 - 雷达图切换展示</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: "Microsoft YaHei", sans-serif;
+      text-align: center;
+    }
+    #selector {
+      margin-top: 20px;
+      padding: 8px 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    #main {
+      width: 800px;
+      height: 600px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h2>受访者画像雷达图</h2>
+  <select id="selector">
+    <option value="q10">目标用户年龄段</option>
+    <option value="q11">当前的居住情况</option>
+    <option value="q12">每周在家做饭次数</option>
+    <option value="q13">税前月收入范围</option>
+    <option value="q14">对新科技产品的态度</option>
+  </select>
+
+  <div id="main"></div>
+
+  <script>
+    const chart = echarts.init(document.getElementById('main'));
+    const green = ['#c8e6c9', '#a5d6a7', '#81c784', '#66bb6a', '#43a047', '#2e7d32'];
+
+    // ===== 数据 =====
+    const dataset = {
+      q10: {
+        title: '目标用户年龄段',
+        data: [
+          { name: '18岁以下', value: 0 },
+          { name: '18-24岁', value: 5 },
+          { name: '25-34岁', value: 7 },
+          { name: '35-44岁', value: 5 },
+          { name: '45岁及以上', value: 3 }
+        ]
+      },
+      q11: {
+        title: '当前居住情况',
+        data: [
+          { name: '独居', value: 6 },
+          { name: '与伴侣/家人同住', value: 11 },
+          { name: '与室友同住', value: 3 }
+        ]
+      },
+      q12: {
+        title: '每周在家做饭次数',
+        data: [
+          { name: '0-2次', value: 6 },
+          { name: '3-5次', value: 4 },
+          { name: '6-7次', value: 10 }
+        ]
+      },
+      q13: {
+        title: '税前月收入范围',
+        data: [
+          { name: '≤3000元', value: 4 },
+          { name: '3001-6000元', value: 4 },
+          { name: '6001-10000元', value: 5 },
+          { name: '10001-15000元', value: 4 },
+          { name: '≥15001元', value: 3 }
+        ]
+      },
+      q14: {
+        title: '对新科技产品的态度',
+        data: [
+          { name: '积极尝鲜者', value: 7 },
+          { name: '谨慎跟随者', value: 5 },
+          { name: '被动使用者', value: 4 },
+          { name: '比较抗拒', value: 4 }
+        ]
+      }
+    };
+
+    // ===== 渲染雷达图函数 =====
+    function renderRadar(qKey) {
+      const q = dataset[qKey];
+      const maxValue = Math.max(...q.data.map(d => d.value)) + 2;
+
+      const option = {
+        title: {
+          text: q.title,
+          left: 'center',
+          top: 10
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: p => `${p.name}：${p.value}`
+        },
+        radar: {
+          indicator: q.data.map(d => ({ name: d.name, max: maxValue })),
+          axisName: { color: '#333', fontSize: 13 },
+          splitArea: {
+            areaStyle: {
+              color: ['#e8f5e9', '#c8e6c9', '#a5d6a7', '#81c784', '#66bb6a']
+            }
+          },
+          splitLine: { lineStyle: { color: '#a5d6a7' } },
+          axisLine: { lineStyle: { color: '#81c784' } }
+        },
+        series: [
+          {
+            name: q.title,
+            type: 'radar',
+            data: [
+              {
+                value: q.data.map(d => d.value),
+                name: '人数',
+                areaStyle: { color: 'rgba(76, 175, 80, 0.4)' },
+                lineStyle: { color: '#388e3c', width: 2 },
+                itemStyle: { color: '#2e7d32' }
+              }
+            ]
+          }
+        ]
+      };
+
+      chart.setOption(option);
+    }
+
+    // 初始化
+    renderRadar('q10');
+
+    // 切换事件
+    document.getElementById('selector').addEventListener('change', e => {
+      renderRadar(e.target.value);
+    });
+
+    window.addEventListener('resize', chart.resize);
+  </script>
+</body>
+</html>
+
