@@ -31,7 +31,7 @@ const tabList = [
 const contentList: Record<string, React.ReactNode> = {
   userPicture: (
     <iframe
-      src="/userPicture.html"
+    src={`${import.meta.env.BASE_URL}userPicture.html`}
       title="受访者画像雷达图"
       width="100%"
       height="550"
@@ -40,7 +40,7 @@ const contentList: Record<string, React.ReactNode> = {
   ),
   shoppingHabit: (
     <iframe
-      src="/shoppingHabit.html"
+      src={`${import.meta.env.BASE_URL}shoppingHabit.html`}
       title="食材采购频率分布"
       width="100%"
       height="550"
@@ -49,7 +49,7 @@ const contentList: Record<string, React.ReactNode> = {
   ),
   foodWaste: (
     <iframe
-      src="/foodWaste.html"
+      src={`${import.meta.env.BASE_URL}foodWaste.html`}
       title="食物浪费情况与原因"
       width="100%"
       height="550"
@@ -58,7 +58,7 @@ const contentList: Record<string, React.ReactNode> = {
   ),
   preferBar: (
     <iframe
-      src="/preferBar.html"
+      src={`${import.meta.env.BASE_URL}preferBar.html`}
       title="功能偏好打分"
       width="100%"
       height="550"
@@ -67,7 +67,7 @@ const contentList: Record<string, React.ReactNode> = {
   ),
   otherAdvices: (
     <iframe
-      src="/otherAdvices.html"
+      src={`${import.meta.env.BASE_URL}otherAdvices.html`}
       title="开放题建议与词云"
       width="100%"
       height="550"

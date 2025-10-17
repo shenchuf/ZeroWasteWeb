@@ -1,4 +1,4 @@
-import { Layout, Menu, Row, Col, Typography } from "antd";
+import { Layout, Menu,  Typography } from "antd";
 import { Link } from "react-scroll";
 
 const { Header } = Layout;

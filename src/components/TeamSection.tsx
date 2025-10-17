@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Flex, Typography, Button } from "antd";
+import { Card,  Typography,  } from "antd";
 
 const { Title, Paragraph } = Typography;
 
@@ -47,8 +47,7 @@ const TeamMissionSection: React.FC = () => (
     >
       {/* 左侧图片 */}
       <img
-        src="/vegetables.jpg" 
-        alt="团队宗旨"
+        src={`${import.meta.env.BASE_URL}vegetables.jpg`} alt="团队介绍"
         style={imgStyle}
         draggable={false}
       />
