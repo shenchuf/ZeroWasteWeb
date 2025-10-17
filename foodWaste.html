@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>食物浪费相关调查（双层圆环图）</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    #main {
+      width: 750px;
+      height: 550px;
+      margin: 60px auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+
+  <script>
+    // ======= 数据 =======
+    const question2 = {
+      "几乎不浪费（<5%）": 5,
+      "少量浪费（5%-10%）": 5,
+      "一般（10%-20%）": 5,
+      "比较严重（20%-30%）": 4,
+      "非常严重（>30%）": 0,
+      "无": 0
+    };
+    const question3 = {
+      "忘记冰箱里有什么食材": 4,
+      "不记得食材的购买日期或保质期": 3,
+      "一次性购买过多": 5,
+      "饮食计划临时改变": 3,
+      "食材储存不当导致过早变质": 4,
+      "无": 5
+    };
+
+    // 过滤掉“无”或值为0的项
+    const data2 = Object.entries(question2)
+      .filter(([k, v]) => k !== '无' && v > 0)
+      .map(([k, v]) => ({ name: k, value: v }));
+
+    const data3 = Object.entries(question3)
+      .filter(([k, v]) => k !== '无' && v > 0)
+      .map(([k, v]) => ({ name: k, value: v }));
+
+    // ======= 初始化 ECharts =======
+    const chart = echarts.init(document.getElementById('main'));
+
+    const option = {
+      title: {
+        text: '食物浪费情况与原因分布',
+        subtext: '内环：浪费比例 外环：浪费原因',
+        left: 'center',
+        top: 10
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}：{c} ({d}%)'
+      },
+      series: [
+        // ===== 内环：问题2 =====
+        {
+          name: '问题2 每周浪费比例',
+          type: 'pie',
+          radius: ['30%', '50%'],
+          label: { show: true, position: 'inside', formatter: '{b}\n{d}%' },
+          labelLine: { show: false },
+          color: [
+            '#a5d6a7', // 浅绿
+            '#81c784',
+            '#66bb6a',
+            '#388e3c',
+            '#1b5e20'
+          ],
+          data: data2
+        },
+        // ===== 外环：问题3 =====
+        {
+          name: '问题3 浪费原因',
+          type: 'pie',
+          radius: ['55%', '75%'],
+          label: { show: true, position: 'outside', formatter: '{b} ({d}%)' },
+          labelLine: { show: true },
+          color: [
+            '#c8e6c9', // 更浅的绿系
+            '#a5d6a7',
+            '#81c784',
+            '#66bb6a',
+            '#43a047',
+            '#2e7d32'
+          ],
+          data: data3
+        }
+      ]
+    };
+
+    chart.setOption(option);
+    window.addEventListener('resize', chart.resize);
+  </script>
+</body>
+</html>

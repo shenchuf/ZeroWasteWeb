@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>问卷开放回答分析</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f5f5f5;
+      color: #2e7d32;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    h2 {
+      margin: 20px 0 20px;
+      color: #2e7d32;
+      font-weight: 600;
+    }
+    .container {
+      width: 95%;
+      height: 60vh;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      display: flex;
+      overflow: hidden;
+    }
+    #wordCloud {
+      flex: 1;
+      height: 100%;
+    }
+    .suggestions {
+      width: 50%;
+      border-left: 1px solid #e0e0e0;
+      padding: 20px;
+      overflow-y: auto;
+      background: linear-gradient(to bottom, #ffffff, #f9fff9);
+    }
+    .suggestions h3 {
+      font-size: 18px;
+      margin-bottom: 18px;
+      color: #2e7d32;
+    }
+    .suggestion {
+      background: #ecfdf5;
+      border-left: 5px solid #4ade80;
+      padding: 10px 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: #1b5e20;
+      line-height: 1.6;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .suggestion:hover {
+      background: #d1fae5;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #a5d6a7;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>用户体验提升建议</h2>
+  <div class="container">
+    <div id="wordCloud"></div>
+    <div class="suggestions">
+      <h3>受访者开放题建议</h3>
+    </div>
+  </div>
+
+  <script>
+    // 关键词频次
+    const keywords = {
+      '食材': 10, '提醒': 4, '避免': 4, '浪费': 3, '建议': 4,
+      '食谱': 2, '过期': 2, '方便': 3, '增加': 4, '加入': 3,
+      '界面': 2, '禁忌': 2, '推荐': 3, '希望': 3, '关联': 2,
+      '家人': 2, '语音输入': 1, '采购': 2, '回收站': 1, '外卖': 1,
+      '买太多': 1, '别太高': 1, '需小': 1, '当食': 1, '材快': 1,
+      '做时': 1, '调大': 1, '当季': 1, '可回收': 1, '临期': 1
+    };
+
+    // 建议列表
+    const suggestions = [
+      '希望APP能关联超市会员，自动同步采购记录',
+      '建议增加食材储存方法科普，比如不同蔬菜的保鲜技巧',
+      '界面尽量简单，老年人操作起来能更方便',
+      '希望食谱能根据家人饮食禁忌（如过敏、素食）筛选',
+      '增加食材用量估算功能，避免一次买太多用不完',
+      '建议加入“食材消耗进度”可视化，直观看到剩余量',
+      '提醒频率别太高，避免打扰，每天固定时间发一次就好',
+      '能不能和社区团购联动，按需小份量采购',
+      '增加“临期食材优先使用”的食谱推荐，减少浪费',
+      '希望APP能统计每月食物浪费量，形成环保报告',
+      '支持语音输入食材信息，不用手动打字会更方便',
+      '建议加入“食材过期预警”，提前提醒处理，避免变质',
+      '关联外卖平台，当食材快过期又没时间做时，推荐相关菜品',
+      '增加“家庭共享账号”，家人能共同查看食材库存',
+      '界面字体能调大，方便视力不好的人使用',
+      '建议加入“食材搭配禁忌”提醒，避免误食问题',
+      '能不能对接小区回收站，提醒可回收的食品包装处理',
+      '能根据季节进行食材推荐，引导购买当季新鲜、不易浪费的食材'
+    ];
+
+    // 渲染建议列表
+    const suggestionContainer = document.querySelector('.suggestions');
+    suggestions.forEach(text => {
+      const div = document.createElement('div');
+      div.className = 'suggestion';
+      div.textContent = text;
+      suggestionContainer.appendChild(div);
+    });
+
+    // 渲染词云
+    const chart = echarts.init(document.getElementById('wordCloud'));
+    const greenPalette = ['#c8e6c9', '#a5d6a7', '#81c784', '#66bb6a', '#43a047', '#2e7d32'];
+    const data = Object.entries(keywords).map(([k,v]) => ({ name: k, value: v }));
+
+    const option = {
+      tooltip: {
+        show: true,
+        formatter: p => `${p.name}：${p.value}`
+      },
+      series: [{
+        type: 'wordCloud',
+        shape: 'circle',
+        gridSize: 8,
+        sizeRange: [16, 80],
+        rotationRange: [-45, 45],
+        textStyle: {
+          fontFamily: 'Microsoft YaHei',
+          color: () => greenPalette[Math.floor(Math.random() * greenPalette.length)]
+        },
+        emphasis: {
+          focus: 'self',
+          textStyle: { shadowBlur: 12, shadowColor: '#66bb6a' }
+        },
+        data
+      }]
+    };
+
+    chart.setOption(option);
+    window.addEventListener('resize', chart.resize);
+  </script>
+</body>
+</html>

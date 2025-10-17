@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>分类分布圆环图</title>
+  <!-- 引入 ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    #main {
+      width: 600px;
+      height: 450px;
+      margin: 60px auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+
+  <script>
+    // ======= 数据部分 =======
+    const data = [
+      { name: '少于1次', value: 4 },
+      { name: '3-4次', value: 5 },
+      { name: '1-2次', value: 7 },
+      { name: '几乎每天', value: 3 }
+    ];
+
+    // ======= 初始化 ECharts =======
+    const chart = echarts.init(document.getElementById('main'));
+
+    const option = {
+      title: {
+        text: '每周采购食材次数',
+        subtext: '共19份问卷',
+        left: 'center',
+        top: 10
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{b}：{c}份 ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        top: 'center'
+      },
+      series: [
+        {
+          name: '类别',
+          type: 'pie',
+          radius: ['45%', '70%'], // 内外半径 => 圆环效果
+          avoidLabelOverlap: false,
+          label: {
+            show: true,
+            position: 'outside',
+            formatter: '{b}: {c} ({d}%)'
+          },
+          labelLine: { show: true },
+          // ======= 绿色系渐变色 =======
+          color: [
+            '#81c784', // A 浅绿
+            '#4caf50', // B 绿色
+            '#2e7d32', // C 深绿
+            '#a5d6a7'  // D 淡绿
+          ],
+          data: data
+        }
+      ]
+    };
+
+    chart.setOption(option);
+    window.addEventListener('resize', chart.resize);
+  </script>
+</body>
+</html>

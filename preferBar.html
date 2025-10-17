@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>用户对于 APP 的功能偏好</title>
+  <!-- 引入 ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    body {
+      background-color: #fafafa;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    #main {
+      width: 800px;
+      height: 500px;
+      margin: 60px auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+
+  <script>
+    // python数据处理取平均值
+    const data = [
+      {"name": "保质期提醒","value": 4.42 },
+      {"name": "购物清单功能","value": 4.0 },
+      {"name": "手动输入无包装食品信息","value": 3.42 },
+      {"name": "扫码录入包装食品信息","value": 3.32 },
+      {"name": "图像识别果蔬 ","value": 3.26},
+      {"name": "根据现有食材推荐食谱","value": 3.16},
+      {"name": "接收附近超市临期折扣信息 ","value": 3.0 }
+    ];
+
+    // 提取名称和数值
+    const names = data.map(d => d.name);
+    const values = data.map(d => d.value);
+
+    // ======= 初始化 ECharts =======
+    const chart = echarts.init(document.getElementById('main'));
+
+    const option = {
+      title: {
+        text: '用户对于 APP 的功能偏好打分（1-5分）',
+        left: 'center',
+        top: 10
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' },
+        formatter: params => {
+          const p = params[0];
+          return `${p.name}：${p.value.toFixed(2)} 分`;
+        }
+      },
+      grid: {
+        left: '10%',
+        right: '10%',
+        top: '10%',
+        bottom: '10%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'value',
+        min: 0,
+        max: 5,
+        name: '平均打分',
+        nameLocation: 'middle',
+        nameGap: 30
+      },
+      yAxis: {
+        type: 'category',
+        data: names,
+        inverse: true, // 让高分在上方
+        axisLabel: { fontSize: 14 }
+      },
+      series: [
+      {
+        type: 'bar',
+        data: values,
+        barWidth: 18,
+        itemStyle: {
+          borderRadius: [6, 6, 6, 6],
+          color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+            { offset: 0, color: '#a5d6a7' },  // 淡绿（与雷达图外围相呼应）
+            { offset: 0.5, color: '#66bb6a' }, // 主体绿
+            { offset: 1, color: '#2e7d32' }    // 深绿收尾，稳定视觉
+          ])
+        },
+        label: {
+          show: true,
+          position: 'right',
+          formatter: '{c} 分',
+          fontSize: 14,
+          color: '#2e7d32' // 深绿文字，协调整体风格
+        }
+      }
+    ]
+
+    };
+
+    chart.setOption(option);
+    window.addEventListener('resize', chart.resize);
+  </script>
+</body>
+</html>
